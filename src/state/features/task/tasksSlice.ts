@@ -1,13 +1,15 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {RootState} from '../../store';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../../store';
 
-interface TasksState {}
+export interface TaskState {
+  id: string | number;
+  date: string;
+  time: string;
+  text: string;
+}
 
-interface TaskState {
-  id: String;
-  date: String;
-  time: String;
-  text: String;
+interface TasksState {
+  [key: string]: Array<TaskState>;
 }
 
 const initialState: TasksState = {};
@@ -17,7 +19,7 @@ export const tasksSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<TaskState>) => {
-      const {date} = action.payload;
+      const { date } = action.payload;
       // @ts-ignore
       const dateTasks = state[date] || [];
       dateTasks.push(action.payload);
@@ -28,7 +30,7 @@ export const tasksSlice = createSlice({
   },
 });
 
-export const {addTask} = tasksSlice.actions;
+export const { addTask } = tasksSlice.actions;
 
 export const selectTasks = (state: RootState) => state.tasks;
 
