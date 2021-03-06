@@ -1,5 +1,5 @@
 {
-  "name": "TaskManager",
+  "name": "task-manager",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -13,7 +13,8 @@
     "@reduxjs/toolkit": "^1.5.0",
     "@types/react-redux": "^7.1.16",
     "react": "16.13.1",
-    "react-native": "0.63.4"
+    "react-native": "0.63.4",
+    "react-redux": "^7.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
