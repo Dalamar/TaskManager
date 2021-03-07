@@ -10,6 +10,8 @@ import {
   ViewToken,
 } from 'react-native';
 import {
+  getDateMonthLocal,
+  getDateWeekDayLocal,
   getNextDate,
   getNextDates,
   getPreviousDates,
@@ -31,14 +33,15 @@ interface State {
   visibleItem: Date;
   loadPrevious: boolean;
   visibleYear: number;
+  visibleMonth: string;
 }
 
 interface Style {
   container: ViewStyle;
-  containerYear: ViewStyle;
-  textYear: ViewStyle;
-  containerCalendarItem: ViewStyle;
-  textCalendarItem: ViewStyle;
+  containerHeader: ViewStyle;
+  textHeader: ViewStyle;
+  containerItem: ViewStyle;
+  textItem: ViewStyle;
 }
 
 export type SelectedDate = Date;
@@ -54,8 +57,11 @@ export class CalendarList extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    this.locale = deviceLocale.split('_')[0];
+
     this.state = {
       visibleYear: new Date().getFullYear(),
+      visibleMonth: getDateMonthLocal(new Date(), this.locale),
       xStart: 0,
       xEnd: 0,
       dates: props.dates,
@@ -67,8 +73,6 @@ export class CalendarList extends React.PureComponent<Props, State> {
       waitForInteraction: true,
       viewAreaCoveragePercentThreshold: 95,
     };
-
-    this.locale = deviceLocale.split('_')[0];
   }
 
   setDates = (dates: Date[]) => {
@@ -81,6 +85,10 @@ export class CalendarList extends React.PureComponent<Props, State> {
 
   setVisibleYear = (visibleYear: number) => {
     this.setState({ visibleYear });
+  };
+
+  setVisibleMonth = (visibleMonth: string) => {
+    this.setState({ visibleMonth });
   };
 
   setXStart = (x: number) => {
@@ -103,32 +111,19 @@ export class CalendarList extends React.PureComponent<Props, State> {
       <TouchableOpacity
         testID={item.toString()}
         onPress={() => onSelectDate(item)}
-        style={styles.containerCalendarItem}>
+        style={styles.containerItem}>
         <Text
           style={[
-            styles.textCalendarItem,
+            styles.textItem,
             selectedDate && {
               fontWeight: 'bold',
             },
           ]}>
-          {new Intl.DateTimeFormat(this.locale, {
-            month: 'short',
-          }).format(item)}
+          {getDateWeekDayLocal(item, this.locale)}
         </Text>
         <Text
           style={[
-            styles.textCalendarItem,
-            selectedDate && {
-              fontWeight: 'bold',
-            },
-          ]}>
-          {new Intl.DateTimeFormat(this.locale, {
-            weekday: 'short',
-          }).format(item)}
-        </Text>
-        <Text
-          style={[
-            styles.textCalendarItem,
+            styles.textItem,
             selectedDate && {
               fontWeight: 'bold',
             },
@@ -147,8 +142,14 @@ export class CalendarList extends React.PureComponent<Props, State> {
     changed: Array<ViewToken>;
   }) => {
     const { viewableItems } = info;
-    this.setVisibleItem(viewableItems[0].item);
-    this.setVisibleYear(viewableItems[0].item.getFullYear());
+    let date = viewableItems[0].item;
+    this.setVisibleItem(date);
+    this.setVisibleYear(date.getFullYear());
+    this.setVisibleMonth(
+      new Intl.DateTimeFormat(this.locale, {
+        month: 'long',
+      }).format(date),
+    );
   };
 
   render() {
@@ -160,12 +161,14 @@ export class CalendarList extends React.PureComponent<Props, State> {
       visibleItem,
       loadPrevious,
       visibleYear,
+      visibleMonth,
     } = this.state;
 
     return (
       <View style={styles.container}>
-        <View style={styles.containerYear}>
-          <Text style={styles.textYear}>{visibleYear}</Text>
+        <View style={styles.containerHeader}>
+          <Text style={styles.textHeader}>{visibleMonth}</Text>
+          <Text style={styles.textHeader}>{visibleYear}</Text>
         </View>
         <FlatList
           testID={testID}
@@ -233,17 +236,20 @@ const styles = StyleSheet.create<Style>({
   container: {
     marginHorizontal: 10,
   },
-  containerYear: {
+  containerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 10,
   },
-  textYear: {
+  textHeader: {
     fontSize: 24,
   },
-  containerCalendarItem: {
+  containerItem: {
     flexDirection: 'column',
+    alignItems: 'center',
     marginHorizontal: 12,
   },
-  textCalendarItem: {
-    fontSize: 16,
+  textItem: {
+    fontSize: 18,
   },
 });

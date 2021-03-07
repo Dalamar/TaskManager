@@ -30,7 +30,7 @@ export const Calendar: FC<Props> = ({ testID }): ReactElement => {
     <View testID={testID} style={styles.container}>
       <CalendarList
         testID="CalendarList"
-        dates={getNextDates(new Date(), daysPageSize)}
+        dates={getNextDates(new Date(), daysPageSize * 3)}
         onSelectDate={getOnSelectDate}
         dateSelected={calendar.selectedDate.toString()}
         pageSize={daysPageSize}
@@ -41,6 +41,6 @@ export const Calendar: FC<Props> = ({ testID }): ReactElement => {
 
 const styles = StyleSheet.create<Style>({
   container: {
-    marginHorizontal: 10,
+    marginHorizontal: 4,
   },
 });

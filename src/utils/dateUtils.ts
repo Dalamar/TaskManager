@@ -20,14 +20,26 @@ export const getPreviousDates = (date: Date, days: number): Date[] => {
   return dates;
 };
 
-export const getNextDate = (date: Date, i: number) => {
+export const getNextDate = (date: Date, i: number): Date => {
   let result = new Date(date);
   result.setDate(result.getDate() + i);
   return result;
 };
 
-export const getPreviousDate = (date: Date, i: number) => {
+export const getPreviousDate = (date: Date, i: number): Date => {
   let result = new Date(date);
   result.setDate(result.getDate() - i);
   return result;
+};
+
+export const getDateMonthLocal = (date: Date, locale: string): string => {
+  return new Intl.DateTimeFormat(locale, {
+    month: 'long',
+  }).format(date);
+};
+
+export const getDateWeekDayLocal = (date: Date, locale: string): string => {
+  return new Intl.DateTimeFormat(locale, {
+    weekday: 'short',
+  }).format(date);
 };
