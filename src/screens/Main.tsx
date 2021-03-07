@@ -8,12 +8,14 @@ import {
 } from '../state/features/task/tasksSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { TaskCard } from '../components/TaskCard';
+import { selectCalendar } from '../state/features/calendar/calendarSlice';
 
 const Main = () => {
   const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
+  const calendar = useSelector(selectCalendar);
 
-  const date = new Date().toLocaleDateString();
+  const date = new Date(calendar.selectedDate).toLocaleDateString();
   const time = new Date().toLocaleTimeString();
 
   return (

@@ -4,6 +4,7 @@ import {
   ListRenderItem,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   ViewStyle,
   ViewToken,
@@ -18,7 +19,9 @@ import { deviceLocale } from '../../utils/localeUtils';
 interface Props {
   testID: string;
   dates: Date[];
+  dateSelected: string;
   pageSize: number;
+  onSelectDate: Function;
 }
 
 interface State {
@@ -37,6 +40,8 @@ interface Style {
   containerCalendarItem: ViewStyle;
   textCalendarItem: ViewStyle;
 }
+
+export type SelectedDate = Date;
 
 export class CalendarList extends React.PureComponent<Props, State> {
   private readonly viewabilityConfig: {
@@ -90,24 +95,53 @@ export class CalendarList extends React.PureComponent<Props, State> {
     this.setState({ loadPrevious });
   };
 
-  renderCalendarItem: ListRenderItem<any> = ({ item }) => {
+  renderCalendarItem: ListRenderItem<SelectedDate> = ({ item }) => {
+    const { onSelectDate, dateSelected } = this.props;
+    const selectedDate = new Date(dateSelected).getDate() === item.getDate();
+
     return (
-      <View style={styles.containerCalendarItem}>
-        <Text style={styles.textCalendarItem}>
+      <TouchableOpacity
+        testID={item.toString()}
+        onPress={() => onSelectDate(item)}
+        style={styles.containerCalendarItem}>
+        <Text
+          style={[
+            styles.textCalendarItem,
+            selectedDate && {
+              fontWeight: 'bold',
+            },
+          ]}>
           {new Intl.DateTimeFormat(this.locale, {
             month: 'short',
           }).format(item)}
         </Text>
-        <Text style={styles.textCalendarItem}>
+        <Text
+          style={[
+            styles.textCalendarItem,
+            selectedDate && {
+              fontWeight: 'bold',
+            },
+          ]}>
           {new Intl.DateTimeFormat(this.locale, {
             weekday: 'short',
           }).format(item)}
         </Text>
-        <Text style={styles.textCalendarItem}>{item.getDate()}</Text>
-      </View>
+        <Text
+          style={[
+            styles.textCalendarItem,
+            selectedDate && {
+              fontWeight: 'bold',
+            },
+          ]}>
+          {item.getDate()}
+        </Text>
+      </TouchableOpacity>
     );
   };
 
+  // Handle FlatList visible items change in order to provide year
+  // for the visible dates and make decision on whether we need to prepend previous
+  // dates on scroll to left
   onViewableItemsChanged = (info: {
     viewableItems: Array<ViewToken>;
     changed: Array<ViewToken>;
@@ -151,11 +185,9 @@ export class CalendarList extends React.PureComponent<Props, State> {
             minIndexForVisible: 0,
           }}
           onScrollBeginDrag={(event) => {
-            console.log('onScrollBeginDrag');
             this.setXStart(event.nativeEvent.contentOffset.x);
           }}
           onScrollEndDrag={(event) => {
-            console.log('onScrollEndDrag');
             this.setXEnd(event.nativeEvent.contentOffset.x);
 
             if (xStart > event.nativeEvent.contentOffset.x) {

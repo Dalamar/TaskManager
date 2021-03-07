@@ -14,6 +14,7 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
 import tasksReducer from './features/task/tasksSlice';
+import calendarReducer from './features/calendar/calendarSlice';
 
 const middlewares = getDefaultMiddleware({
   serializableCheck: {
@@ -27,13 +28,14 @@ if (__DEV__) {
 }
 
 const persistConfig = {
-  key: 'root',
+  key: 'TaskManager',
   version: 1,
   storage: AsyncStorage,
 };
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
+  calendar: calendarReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

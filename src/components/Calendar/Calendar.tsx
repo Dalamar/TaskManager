@@ -1,7 +1,12 @@
 import React, { FC, ReactElement } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { getNextDates } from '../../utils/dateUtils';
-import { CalendarList } from './CalendarList';
+import { CalendarList, SelectedDate } from './CalendarList';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectCalendar,
+  selectDate,
+} from '../../state/features/calendar/calendarSlice';
 
 interface Props {
   testID: string;
@@ -13,12 +18,21 @@ interface Style {
 
 export const Calendar: FC<Props> = ({ testID }): ReactElement => {
   const daysPageSize = 7;
+  const calendar = useSelector(selectCalendar);
+  const dispatch = useDispatch();
+
+  const getOnSelectDate = (item: SelectedDate) => {
+    console.log(item);
+    dispatch(selectDate({ selectedDate: item.toString() }));
+  };
 
   return (
     <View testID={testID} style={styles.container}>
       <CalendarList
         testID="CalendarList"
         dates={getNextDates(new Date(), daysPageSize)}
+        onSelectDate={getOnSelectDate}
+        dateSelected={calendar.selectedDate.toString()}
         pageSize={daysPageSize}
       />
     </View>
