@@ -38,6 +38,7 @@ interface State {
 
 interface Style {
   container: ViewStyle;
+  containerList: ViewStyle;
   containerHeader: ViewStyle;
   textHeader: ViewStyle;
   containerItem: ViewStyle;
@@ -172,14 +173,14 @@ export class CalendarList extends React.PureComponent<Props, State> {
         </View>
         <FlatList
           testID={testID}
-          renderItem={this.renderCalendarItem}
+          contentContainerStyle={styles.containerList}
           data={dates}
-          extraData={visibleItem}
+          keyExtractor={(item) => item.valueOf().toString()}
+          renderItem={this.renderCalendarItem}
           horizontal={true}
           bounces={true}
-          keyExtractor={(item) => item.valueOf().toString()}
           pagingEnabled={true}
-          windowSize={pageSize}
+          // windowSize={pageSize}
           initialNumToRender={pageSize}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
@@ -234,12 +235,17 @@ export class CalendarList extends React.PureComponent<Props, State> {
 
 const styles = StyleSheet.create<Style>({
   container: {
-    marginHorizontal: 10,
+    marginHorizontal: 0,
+  },
+  containerList: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   containerHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginVertical: 24,
+    marginHorizontal: 16,
   },
   textHeader: {
     fontSize: 24,
@@ -247,7 +253,7 @@ const styles = StyleSheet.create<Style>({
   containerItem: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginHorizontal: 12,
+    width: 59,
   },
   textItem: {
     fontSize: 18,

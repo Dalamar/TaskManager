@@ -41,6 +41,6 @@ export const Calendar: FC<Props> = ({ testID }): ReactElement => {
 
 const styles = StyleSheet.create<Style>({
   container: {
-    marginHorizontal: 4,
+    marginHorizontal: 0,
   },
 });
