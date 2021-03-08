@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { TaskState } from '../state/features/task/tasksSlice';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { Swipeable } from 'react-native-gesture-handler';
 
 interface Props {
   task: TaskState;

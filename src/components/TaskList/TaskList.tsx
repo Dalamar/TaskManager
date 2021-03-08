@@ -21,6 +21,7 @@ export const TaskList: FC<Props> = ({ testID, tasks }): ReactElement => {
     <FlatList
       contentContainerStyle={styles.container}
       data={tasks}
+      keyExtractor={(item) => item.id.toString()}
       testID={testID}
       renderItem={renderItem}
     />
@@ -28,7 +29,5 @@ export const TaskList: FC<Props> = ({ testID, tasks }): ReactElement => {
 };
 
 const styles = StyleSheet.create<Style>({
-  container: {
-    flex: 1,
-  },
+  container: {},
 });
