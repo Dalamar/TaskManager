@@ -19,7 +19,7 @@ const renderItem: ListRenderItem<TaskState> = ({ item }) => (
 export const TaskList: FC<Props> = ({ testID, tasks }): ReactElement => {
   return (
     <FlatList
-      style={styles.container}
+      contentContainerStyle={styles.container}
       data={tasks}
       testID={testID}
       renderItem={renderItem}

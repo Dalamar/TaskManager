@@ -56,6 +56,7 @@ const styles = StyleSheet.create<Style>({
   },
   containerTasksList: {
     flex: 1,
+    marginHorizontal: 16,
   },
   containerAddTaskButton: {},
 });

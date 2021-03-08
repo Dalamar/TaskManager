@@ -22,12 +22,3 @@ target 'TaskManager' do
     flipper_post_install(installer)
   end
 end
-
-target 'TaskManager-tvOS' do
-  # Pods for TaskManager-tvOS
-
-  target 'TaskManager-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-end
