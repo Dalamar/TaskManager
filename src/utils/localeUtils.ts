@@ -5,3 +5,5 @@ export const deviceLocale =
     ? NativeModules.SettingsManager.settings.AppleLocale ||
       NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
     : NativeModules.I18nManager.localeIdentifier;
+
+export const deviceLocaleLang = () => deviceLocale.split('_')[0];

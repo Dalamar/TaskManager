@@ -22,7 +22,6 @@ export const Calendar: FC<Props> = ({ testID }): ReactElement => {
   const dispatch = useDispatch();
 
   const getOnSelectDate = (item: SelectedDate) => {
-    console.log(item);
     dispatch(selectDate({ selectedDate: item.toString() }));
   };
 
@@ -30,7 +29,7 @@ export const Calendar: FC<Props> = ({ testID }): ReactElement => {
     <View testID={testID} style={styles.container}>
       <CalendarList
         testID="CalendarList"
-        dates={getNextDates(new Date(), daysPageSize * 3)}
+        dates={getNextDates(new Date(), daysPageSize * 2)}
         onSelectDate={getOnSelectDate}
         dateSelected={calendar.selectedDate.toString()}
         pageSize={daysPageSize}

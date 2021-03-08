@@ -20,14 +20,18 @@ export const getPreviousDates = (date: Date, days: number): Date[] => {
   return dates;
 };
 
+export const getDateAtMidnight = (date: Date) => {
+  return new Date(new Date(date).setHours(0, 0, 0, 0));
+};
+
 export const getNextDate = (date: Date, i: number): Date => {
-  let result = new Date(date);
+  let result = getDateAtMidnight(date);
   result.setDate(result.getDate() + i);
   return result;
 };
 
 export const getPreviousDate = (date: Date, i: number): Date => {
-  let result = new Date(date);
+  let result = getDateAtMidnight(date);
   result.setDate(result.getDate() - i);
   return result;
 };

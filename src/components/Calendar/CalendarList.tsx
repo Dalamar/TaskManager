@@ -1,7 +1,7 @@
 import React from 'react';
 import {
+  Button,
   FlatList,
-  ListRenderItem,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,13 +10,14 @@ import {
   ViewToken,
 } from 'react-native';
 import {
+  getDateAtMidnight,
   getDateMonthLocal,
   getDateWeekDayLocal,
   getNextDate,
   getNextDates,
   getPreviousDates,
 } from '../../utils/dateUtils';
-import { deviceLocale } from '../../utils/localeUtils';
+import { deviceLocaleLang } from '../../utils/localeUtils';
 
 interface Props {
   testID: string;
@@ -53,12 +54,14 @@ export class CalendarList extends React.PureComponent<Props, State> {
     waitForInteraction: boolean;
   };
 
-  private locale: string;
+  private readonly locale: string;
+  private calendarRef: FlatList<Date> | null;
 
   constructor(props: Props) {
     super(props);
 
-    this.locale = deviceLocale.split('_')[0];
+    this.calendarRef = null;
+    this.locale = deviceLocaleLang();
 
     this.state = {
       visibleYear: new Date().getFullYear(),
@@ -104,14 +107,22 @@ export class CalendarList extends React.PureComponent<Props, State> {
     this.setState({ loadPrevious });
   };
 
-  renderCalendarItem: ListRenderItem<SelectedDate> = ({ item }) => {
+  // @ts-ignore
+  renderCalendarItem = ({ item }) => {
     const { onSelectDate, dateSelected } = this.props;
     const selectedDate = new Date(dateSelected).getDate() === item.getDate();
 
     return (
       <TouchableOpacity
         testID={item.toString()}
-        onPress={() => onSelectDate(item)}
+        onPress={() => {
+          // Visible items in the FlatList after few scrolls may have slightly offset.
+          // onPress then triggers scroll animation of the list items which triggers data load
+          // Following line prevents load previous dates in such cases.
+          this.setLoadPrevious(false);
+
+          onSelectDate(item);
+        }}
         style={styles.containerItem}>
         <Text
           style={[
@@ -135,22 +146,42 @@ export class CalendarList extends React.PureComponent<Props, State> {
     );
   };
 
-  // Handle FlatList visible items change in order to provide year
-  // for the visible dates and make decision on whether we need to prepend previous
-  // dates on scroll to left
+  // Handle FlatList visible items change in order to provide year and month
+  // for the visible dates and data for making the decision on whether we need
+  // to prepend previous dates on scroll to the left
   onViewableItemsChanged = (info: {
     viewableItems: Array<ViewToken>;
     changed: Array<ViewToken>;
   }) => {
     const { viewableItems } = info;
-    let date = viewableItems[0].item;
-    this.setVisibleItem(date);
-    this.setVisibleYear(date.getFullYear());
-    this.setVisibleMonth(
-      new Intl.DateTimeFormat(this.locale, {
-        month: 'long',
-      }).format(date),
-    );
+    let date = viewableItems[0]?.item;
+    if (date) {
+      this.setVisibleItem(date);
+      this.setVisibleYear(date.getFullYear());
+      this.setVisibleMonth(
+        new Intl.DateTimeFormat(this.locale, {
+          month: 'long',
+        }).format(date),
+      );
+    }
+  };
+
+  handleBackToToday = () => {
+    const { dates } = this.state;
+    const { onSelectDate } = this.props;
+    let today = getDateAtMidnight(new Date());
+
+    // Serialize dates collection as integer since two Date objects will never be equal
+    const index = dates.map(Number).indexOf(+today.valueOf());
+
+    if (index !== -1) {
+      this.calendarRef?.scrollToIndex({
+        animated: false,
+        index,
+      });
+    }
+
+    onSelectDate(today);
   };
 
   render() {
@@ -172,6 +203,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
           <Text style={styles.textHeader}>{visibleYear}</Text>
         </View>
         <FlatList
+          ref={(ref) => (this.calendarRef = ref)}
           testID={testID}
           contentContainerStyle={styles.containerList}
           data={dates}
@@ -180,22 +212,29 @@ export class CalendarList extends React.PureComponent<Props, State> {
           horizontal={true}
           bounces={true}
           pagingEnabled={true}
-          // windowSize={pageSize}
+          windowSize={pageSize * 3}
           initialNumToRender={pageSize}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          maintainVisibleContentPosition={{
-            autoscrollToTopThreshold: null,
-            minIndexForVisible: 0,
+          onViewableItemsChanged={this.onViewableItemsChanged}
+          viewabilityConfig={this.viewabilityConfig}
+          onScrollToIndexFailed={(info) => {
+            // scrollToIndex should be used in conjunction with onScrollToIndexFailed
+            const wait = new Promise((resolve) => setTimeout(resolve, 500));
+            wait.then(() => {
+              this.calendarRef?.scrollToIndex({
+                index: info.index,
+                animated: false,
+              });
+            });
           }}
           onScrollBeginDrag={(event) => {
             this.setXStart(event.nativeEvent.contentOffset.x);
           }}
+          // Scroll direction is left
           onScrollEndDrag={(event) => {
             this.setXEnd(event.nativeEvent.contentOffset.x);
-
             if (xStart > event.nativeEvent.contentOffset.x) {
-              // Scroll direction is left
               if (dates.indexOf(visibleItem) === 0) {
                 // we need to prepend previous dates
                 this.setLoadPrevious(true);
@@ -205,16 +244,13 @@ export class CalendarList extends React.PureComponent<Props, State> {
               }
             }
           }}
-          onViewableItemsChanged={this.onViewableItemsChanged}
-          viewabilityConfig={this.viewabilityConfig}
           onMomentumScrollEnd={() => {
             if (xStart > xEnd) {
               // Scroll direction is left
               if (loadPrevious) {
                 // we need to prepend previous dates
                 const nextDates = getPreviousDates(dates[0], pageSize);
-                nextDates.concat(dates);
-                this.setDates(nextDates);
+                this.setDates(nextDates.concat(dates));
               }
             } else {
               // Scroll direction is right
@@ -228,6 +264,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
             }
           }}
         />
+        <Button title="Back to today" onPress={this.handleBackToToday} />
       </View>
     );
   }
