@@ -108,21 +108,24 @@ export class CalendarList extends React.PureComponent<Props, State> {
     this.setState({ loadPrevious });
   };
 
+  handleListItemPress = (item: Date) => {
+    const { onSelectDate } = this.props;
+    // Visible items in the FlatList after few scrolls may have slightly offset.
+    // onPress then triggers scroll animation of the list items which triggers data load
+    // Following line prevents load previous dates in such cases.
+    this.setLoadPrevious(false);
+
+    onSelectDate(item);
+  };
+
   renderCalendarItem: ListRenderItem<Date> = ({ item }) => {
-    const { onSelectDate, dateSelected } = this.props;
+    const { dateSelected } = this.props;
     const selectedDate = new Date(dateSelected).getDate() === item.getDate();
 
     return (
       <TouchableOpacity
         testID={item.toString()}
-        onPress={() => {
-          // Visible items in the FlatList after few scrolls may have slightly offset.
-          // onPress then triggers scroll animation of the list items which triggers data load
-          // Following line prevents load previous dates in such cases.
-          this.setLoadPrevious(false);
-
-          onSelectDate(item);
-        }}
+        onPress={() => this.handleListItemPress(item)}
         style={styles.containerItem}>
         <Text
           style={[

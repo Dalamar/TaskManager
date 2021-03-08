@@ -4,7 +4,8 @@ import { v4 as uuid } from 'uuid';
 import { addTask, selectDateTasks } from '../state/features/task/tasksSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCalendar } from '../state/features/calendar/calendarSlice';
-import { TaskList } from '../components/TaskList/TaskList';
+import TaskList from '../components/TaskList';
+import Calendar from '../components/Calendar';
 
 interface Style {
   container: ViewStyle;
@@ -12,7 +13,7 @@ interface Style {
   containerAddTaskButton: ViewStyle;
 }
 
-const Tasks = () => {
+const Main = () => {
   const dispatch = useDispatch();
   const { selectedDate } = useSelector(selectCalendar);
   const dateTasks = useSelector(
@@ -35,6 +36,9 @@ const Tasks = () => {
 
   return (
     <View style={styles.container}>
+      <View>
+        <Calendar testID="Calendar" />
+      </View>
       <View style={styles.containerTasksList}>
         <TaskList testID="TaskList" tasks={dateTasks} />
       </View>
@@ -56,4 +60,4 @@ const styles = StyleSheet.create<Style>({
   containerAddTaskButton: {},
 });
 
-export default Tasks;
+export default Main;

@@ -6,8 +6,7 @@ import { store } from './state/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import ErrorBoundary from './components/ErrorBoundary';
-import Calendar from './components/Calendar';
-import Tasks from './screens/Tasks';
+import Main from './screens/Main';
 
 const App = () => {
   let persistor = persistStore(store);
@@ -18,8 +17,7 @@ const App = () => {
         <PersistGate loading={null} persistor={persistor}>
           <StatusBar barStyle="dark-content" />
           <SafeAreaView style={{ flex: 1 }}>
-            <Calendar testID="Calendar" />
-            <Tasks />
+            <Main />
           </SafeAreaView>
         </PersistGate>
       </Provider>
