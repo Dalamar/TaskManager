@@ -31,6 +31,7 @@ const persistConfig = {
   key: 'TaskManager',
   version: 1,
   storage: AsyncStorage,
+  // blacklist: ['tasks'],
 };
 
 const rootReducer = combineReducers({

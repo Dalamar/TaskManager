@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../store';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface TaskState {
   id: string | number;
@@ -8,7 +7,7 @@ export interface TaskState {
   text: string;
 }
 
-interface TasksState {
+export interface TasksState {
   [key: string]: Array<TaskState>;
 }
 
@@ -32,6 +31,17 @@ export const tasksSlice = createSlice({
 
 export const { addTask } = tasksSlice.actions;
 
-export const selectTasks = (state: RootState) => state.tasks;
+export const selectTasks = createSelector(
+  (state: TasksState) => state.tasks,
+  (tasks) => tasks,
+);
+
+export const selectDateTasks = (date: string) => {
+  return createSelector(
+    (state: TasksState) => state.tasks,
+    // @ts-ignore
+    (tasks) => tasks[date],
+  );
+};
 
 export default tasksSlice.reducer;

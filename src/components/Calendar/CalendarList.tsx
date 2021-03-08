@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button,
   FlatList,
+  ListRenderItem,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -107,8 +108,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
     this.setState({ loadPrevious });
   };
 
-  // @ts-ignore
-  renderCalendarItem = ({ item }) => {
+  renderCalendarItem: ListRenderItem<Date> = ({ item }) => {
     const { onSelectDate, dateSelected } = this.props;
     const selectedDate = new Date(dateSelected).getDate() === item.getDate();
 
