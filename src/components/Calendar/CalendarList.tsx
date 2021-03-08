@@ -36,6 +36,7 @@ interface State {
   loadPrevious: boolean;
   visibleYear: number;
   visibleMonth: string;
+  currentDayIsVisible: boolean;
 }
 
 interface Style {
@@ -72,11 +73,12 @@ export class CalendarList extends React.PureComponent<Props, State> {
       dates: props.dates,
       visibleItem: props.dates[0],
       loadPrevious: false,
+      currentDayIsVisible: true,
     };
 
     this.viewabilityConfig = {
       waitForInteraction: true,
-      viewAreaCoveragePercentThreshold: 95,
+      viewAreaCoveragePercentThreshold: 0,
     };
   }
 
@@ -106,6 +108,10 @@ export class CalendarList extends React.PureComponent<Props, State> {
 
   setLoadPrevious = (loadPrevious: boolean) => {
     this.setState({ loadPrevious });
+  };
+
+  setCurrentDayIsVisible = (currentDayIsVisible: boolean) => {
+    this.setState({ currentDayIsVisible });
   };
 
   handleListItemPress = (item: Date) => {
@@ -157,7 +163,10 @@ export class CalendarList extends React.PureComponent<Props, State> {
     changed: Array<ViewToken>;
   }) => {
     const { viewableItems } = info;
-    let date = viewableItems[0]?.item;
+
+    let date = viewableItems?.filter((viewToken) => viewToken.isViewable)[0]
+      .item;
+
     if (date) {
       this.setVisibleItem(date);
       this.setVisibleYear(date.getFullYear());
@@ -177,6 +186,9 @@ export class CalendarList extends React.PureComponent<Props, State> {
     // Serialize dates collection as integer since two Date objects will never be equal
     const index = dates.map(Number).indexOf(+today.valueOf());
 
+    this.setCurrentDayIsVisible(true);
+
+    // Scroll to current date
     if (index !== -1) {
       this.calendarRef?.scrollToIndex({
         animated: false,
@@ -197,6 +209,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
       loadPrevious,
       visibleYear,
       visibleMonth,
+      currentDayIsVisible,
     } = this.state;
 
     return (
@@ -234,10 +247,10 @@ export class CalendarList extends React.PureComponent<Props, State> {
           onScrollBeginDrag={(event) => {
             this.setXStart(event.nativeEvent.contentOffset.x);
           }}
-          // Scroll direction is left
           onScrollEndDrag={(event) => {
             this.setXEnd(event.nativeEvent.contentOffset.x);
             if (xStart > event.nativeEvent.contentOffset.x) {
+              // Scroll direction is left
               if (dates.indexOf(visibleItem) === 0) {
                 // we need to prepend previous dates
                 this.setLoadPrevious(true);
@@ -248,12 +261,20 @@ export class CalendarList extends React.PureComponent<Props, State> {
             }
           }}
           onMomentumScrollEnd={() => {
+            const isCurrentDayIsVisible =
+              visibleItem.toLocaleDateString() ===
+              getDateAtMidnight(new Date()).toLocaleDateString();
+
             if (xStart > xEnd) {
               // Scroll direction is left
               if (loadPrevious) {
                 // we need to prepend previous dates
                 const nextDates = getPreviousDates(dates[0], pageSize);
                 this.setDates(nextDates.concat(dates));
+
+                this.setCurrentDayIsVisible(false);
+              } else {
+                this.setCurrentDayIsVisible(isCurrentDayIsVisible);
               }
             } else {
               // Scroll direction is right
@@ -264,10 +285,16 @@ export class CalendarList extends React.PureComponent<Props, State> {
               );
               dates.push(...nextDates);
               this.setDates(dates);
+
+              this.setCurrentDayIsVisible(isCurrentDayIsVisible);
             }
           }}
         />
-        <Button title="Back to today" onPress={this.handleBackToToday} />
+        {currentDayIsVisible ? (
+          <View style={{ height: 38 }} />
+        ) : (
+          <Button title="Get back to today" onPress={this.handleBackToToday} />
+        )}
       </View>
     );
   }
