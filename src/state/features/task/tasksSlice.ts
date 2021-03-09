@@ -1,4 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../../store';
 
 export interface TaskState {
   id: string | number;
@@ -7,40 +8,37 @@ export interface TaskState {
   text: string;
 }
 
-export interface TasksState {
-  [key: string]: Array<TaskState>;
-}
+export type TasksState = TaskState[];
 
-const initialState: TasksState = {};
+const initialState: TasksState = [];
 
 export const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
     addTask: (state, action: PayloadAction<TaskState>) => {
-      const { date } = action.payload;
-      // @ts-ignore
-      const dateTasks = state[date] || [];
-      dateTasks.push(action.payload);
-      // @ts-ignore
-      state[date] = dateTasks;
-      return state;
+      return state.concat(action.payload);
+    },
+    deleteTask: (state, action: PayloadAction<TaskState>) => {
+      console.log('action', action);
+      return state.filter((task: TaskState) => task.id !== action.payload.id);
     },
   },
 });
 
-export const { addTask } = tasksSlice.actions;
-
-export const selectTasks = createSelector(
-  (state: TasksState) => state.tasks,
-  (tasks) => tasks,
-);
+export const { addTask, deleteTask } = tasksSlice.actions;
 
 export const selectDateTasks = (date: string) => {
   return createSelector(
-    (state: TasksState) => state.tasks,
-    // @ts-ignore
-    (tasks) => tasks[date],
+    (state: RootState) => state.tasks,
+    (tasks) => tasks.filter((task: TaskState) => task.date === date),
+  );
+};
+
+export const selectTasksByText = (text: string) => {
+  return createSelector(
+    (state: RootState) => state.tasks,
+    (tasks) => tasks.filter((task: TaskState) => task.text.includes(text)),
   );
 };
 

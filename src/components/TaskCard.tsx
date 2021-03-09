@@ -1,7 +1,15 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { TaskState } from '../state/features/task/tasksSlice';
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
+import { TaskState, deleteTask } from '../state/features/task/tasksSlice';
 import { Swipeable } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   task: TaskState;
@@ -19,6 +27,8 @@ interface Style {
 
 export const TaskCard = ({ testID, task }: Props) => {
   const { text, date, time } = task;
+  const dispatch = useDispatch();
+
   const renderRightActions = (
     progressAnimatedValue: Animated.AnimatedInterpolation,
     dragAnimatedValue: Animated.AnimatedInterpolation,
@@ -30,10 +40,14 @@ export const TaskCard = ({ testID, task }: Props) => {
 
     return (
       <View style={styles.containerDeleteBox}>
-        <Animated.Text
-          style={[{ transform: [{ scale: scale }] }, styles.textDeleteBox]}>
-          Delete
-        </Animated.Text>
+        <TouchableOpacity
+          testID={`${testID}_Button`}
+          onPress={() => dispatch(deleteTask(task))}>
+          <Animated.Text
+            style={[{ transform: [{ scale: scale }] }, styles.textDeleteBox]}>
+            Delete
+          </Animated.Text>
+        </TouchableOpacity>
       </View>
     );
   };

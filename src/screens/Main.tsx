@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, StyleSheet, View, ViewStyle } from 'react-native';
 import { v4 as uuid } from 'uuid';
-import { addTask, selectDateTasks } from '../state/features/task/tasksSlice';
+import {
+  addTask,
+  selectDateTasks,
+  selectTasksByText,
+} from '../state/features/task/tasksSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCalendar } from '../state/features/calendar/calendarSlice';
 import TaskList from '../components/TaskList';
 import Calendar from '../components/Calendar';
+import Search from '../components/Search';
 
 interface Style {
   container: ViewStyle;
@@ -15,10 +20,12 @@ interface Style {
 
 const Main = () => {
   const dispatch = useDispatch();
+  const [searchText, setSearchText] = useState('');
   const { selectedDate } = useSelector(selectCalendar);
   const dateTasks = useSelector(
     selectDateTasks(new Date(selectedDate).toLocaleDateString()),
   );
+  const searchResultTasks = useSelector(selectTasksByText(searchText));
 
   const date = new Date(selectedDate).toLocaleDateString();
   const time = new Date().toLocaleTimeString();
@@ -28,8 +35,9 @@ const Main = () => {
         id: uuid(),
         date,
         time,
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus nec sapien nec consectetur. Nunc at dictum nisl, ac suscipit.',
+        text: `${Math.floor(
+          Math.random() * 999,
+        )} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus nec sapien nec consectetur. Nunc at dictum nisl, ac suscipit.`,
       }),
     );
   };
@@ -39,8 +47,11 @@ const Main = () => {
       <View>
         <Calendar testID="Calendar" />
       </View>
+      <View>
+        <Search testID="Search" onSearch={setSearchText} />
+      </View>
       <View style={styles.containerTasksList}>
-        <TaskList testID="TaskList" tasks={dateTasks} />
+        <TaskList testID="TaskList" tasks={searchResultTasks || dateTasks} />
       </View>
       <View style={styles.containerAddTaskButton}>
         <Button onPress={handleAddTask} title="Add Task" />
@@ -56,7 +67,7 @@ const styles = StyleSheet.create<Style>({
   },
   containerTasksList: {
     flex: 1,
-    marginHorizontal: 16,
+    margin: 16,
   },
   containerAddTaskButton: {},
 });
