@@ -19,6 +19,7 @@ import {
   getPreviousDates,
 } from '../../utils/dateUtils';
 import { deviceLocaleLang } from '../../utils/localeUtils';
+import { colors } from '../../design/colors';
 
 interface Props {
   testID: string;
@@ -316,6 +317,7 @@ const styles = StyleSheet.create<Style>({
   },
   textHeader: {
     fontSize: 24,
+    color: colors.textCalendar,
   },
   containerItem: {
     flexDirection: 'column',
@@ -324,5 +326,6 @@ const styles = StyleSheet.create<Style>({
   },
   textItem: {
     fontSize: 18,
+    color: colors.textCalendar,
   },
 });

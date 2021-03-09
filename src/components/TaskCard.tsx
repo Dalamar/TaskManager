@@ -10,6 +10,7 @@ import {
 import { TaskState, deleteTask } from '../state/features/task/tasksSlice';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
+import { colors } from '../design/colors';
 
 interface Props {
   task: TaskState;
@@ -74,28 +75,30 @@ const styles = StyleSheet.create<Style>({
     paddingTop: 16,
     paddingBottom: 8,
     justifyContent: 'space-between',
-    backgroundColor: '#f6df13',
+    backgroundColor: colors.bgCard,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
   },
   containerDateTime: {
     alignSelf: 'flex-end',
   },
   text: {
     fontSize: 14,
-    color: '#000000',
+    color: colors.textCard,
   },
   textDateTime: {
     fontSize: 10,
-    color: '#000000',
+    color: colors.textCard,
   },
   containerDeleteBox: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red',
+    backgroundColor: colors.bgDeleteButton,
     width: 100,
     height: 120,
   },
   textDeleteBox: {
-    color: 'white',
+    color: colors.textDeleteButton,
     fontWeight: 'bold',
   },
 });

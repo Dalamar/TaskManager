@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { v4 as uuid } from 'uuid';
 import {
   addTask,
@@ -11,6 +11,7 @@ import { selectCalendar } from '../state/features/calendar/calendarSlice';
 import TaskList from '../components/TaskList';
 import Calendar from '../components/Calendar';
 import Search from '../components/Search';
+import Button from '../components/Button';
 
 interface Style {
   container: ViewStyle;
@@ -57,7 +58,11 @@ const Main = () => {
         />
       </View>
       <View style={styles.containerAddTaskButton}>
-        <Button onPress={handleAddTask} title="Add Task" />
+        <Button
+          testID="AddTaskButton"
+          onPress={handleAddTask}
+          title="Add Task"
+        />
       </View>
     </View>
   );
