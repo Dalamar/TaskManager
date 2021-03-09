@@ -15,6 +15,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import tasksReducer from './features/task/tasksSlice';
 import calendarReducer from './features/calendar/calendarSlice';
+import searchReducer from './features/search/searchSlice';
 
 const middlewares = getDefaultMiddleware({
   serializableCheck: {
@@ -31,12 +32,13 @@ const persistConfig = {
   key: 'TaskManager',
   version: 1,
   storage: AsyncStorage,
-  // blacklist: ['tasks', 'calendar'],
+  blacklist: ['tasks', 'calendar'],
 };
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
   calendar: calendarReducer,
+  search: searchReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,7 +1,7 @@
-import React, { FC, ReactElement, useState } from 'react';
+import React, { FC, ReactElement, useRef } from 'react';
 import { StyleSheet, TextInput, View, ViewStyle } from 'react-native';
-import { colors } from '../../design/colors';
 import Button from '../Button';
+import InputText from '../InputText';
 
 interface Props {
   testID: string;
@@ -10,33 +10,30 @@ interface Props {
 
 interface Style {
   container: ViewStyle;
-  containerInput: ViewStyle;
-  containerButton: ViewStyle;
-  textButton: ViewStyle;
+  containerSearchInput: ViewStyle;
 }
 
 export const Search: FC<Props> = ({ testID, onSearch }): ReactElement => {
-  const [searchText, setSearchText] = useState('');
-
+  const inputRef = useRef<TextInput>(null);
   return (
     <View testID={testID} style={styles.container}>
-      <TextInput
-        testID={`${testID}TextInput`}
-        onChangeText={(text: string) => {
-          setSearchText(text);
-          onSearch(text);
-        }}
-        value={searchText}
-        style={styles.containerInput}
-        placeholder="Search..."
-        placeholderTextColor="#769fcd"
-      />
+      <View style={styles.containerSearchInput}>
+        <InputText
+          inputRef={inputRef}
+          onChangeText={(text: string) => {
+            onSearch(text);
+          }}
+          testID="SearchInputText"
+          placeholder="Search..."
+        />
+      </View>
+
       <Button
         testID={`${testID}Button`}
         title="Cancel"
         onPress={() => {
-          setSearchText('');
           onSearch('');
+          inputRef?.current?.clear();
         }}
       />
     </View>
@@ -49,22 +46,7 @@ const styles = StyleSheet.create<Style>({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  containerInput: {
-    padding: 8,
+  containerSearchInput: {
     width: '80%',
-    borderWidth: 0.3,
-    borderRadius: 4,
-    borderColor: colors.borderInput,
-    color: colors.textInput,
-  },
-  containerButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-  },
-  textButton: {
-    color: colors.textButton,
-    fontSize: 16,
-    fontWeight: '400',
   },
 });

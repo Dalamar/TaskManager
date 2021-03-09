@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { v4 as uuid } from 'uuid';
 import {
-  addTask,
   selectDateTasks,
   selectTasksByText,
 } from '../state/features/task/tasksSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectCalendar } from '../state/features/calendar/calendarSlice';
 import TaskList from '../components/TaskList';
 import Calendar from '../components/Calendar';
 import Search from '../components/Search';
 import Button from '../components/Button';
-import { getDateAtMidnight } from '../utils/dateUtils';
+import { useNavigation } from '@react-navigation/native';
 
 interface Style {
   container: ViewStyle;
@@ -21,24 +19,14 @@ interface Style {
 }
 
 const Main = () => {
-  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const { selectedDate } = useSelector(selectCalendar);
   const dateTasks = useSelector(selectDateTasks(selectedDate));
   const searchResultTasks = useSelector(selectTasksByText(searchText));
+  const navigation = useNavigation();
 
-  const date = getDateAtMidnight(new Date(selectedDate)).valueOf();
   const handleAddTask = () => {
-    dispatch(
-      addTask({
-        id: uuid(),
-        date,
-        timestamp: Date.now(),
-        text: `${Math.floor(
-          Math.random() * 999,
-        )} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus nec sapien nec consectetur. Nunc at dictum nisl, ac suscipit.`,
-      }),
-    );
+    navigation.navigate('AddTask');
   };
 
   return (
