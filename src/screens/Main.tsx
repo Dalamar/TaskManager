@@ -51,7 +51,10 @@ const Main = () => {
         <Search testID="Search" onSearch={setSearchText} />
       </View>
       <View style={styles.containerTasksList}>
-        <TaskList testID="TaskList" tasks={searchResultTasks || dateTasks} />
+        <TaskList
+          testID="TaskList"
+          tasks={searchText ? searchResultTasks : dateTasks}
+        />
       </View>
       <View style={styles.containerAddTaskButton}>
         <Button onPress={handleAddTask} title="Add Task" />
