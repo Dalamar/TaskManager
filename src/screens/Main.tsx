@@ -12,6 +12,7 @@ import TaskList from '../components/TaskList';
 import Calendar from '../components/Calendar';
 import Search from '../components/Search';
 import Button from '../components/Button';
+import { getDateAtMidnight } from '../utils/dateUtils';
 
 interface Style {
   container: ViewStyle;
@@ -23,19 +24,16 @@ const Main = () => {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const { selectedDate } = useSelector(selectCalendar);
-  const dateTasks = useSelector(
-    selectDateTasks(new Date(selectedDate).toLocaleDateString()),
-  );
+  const dateTasks = useSelector(selectDateTasks(selectedDate));
   const searchResultTasks = useSelector(selectTasksByText(searchText));
 
-  const date = new Date(selectedDate).toLocaleDateString();
-  const time = new Date().toLocaleTimeString();
+  const date = getDateAtMidnight(new Date(selectedDate)).valueOf();
   const handleAddTask = () => {
     dispatch(
       addTask({
         id: uuid(),
         date,
-        time,
+        timestamp: Date.now(),
         text: `${Math.floor(
           Math.random() * 999,
         )} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus nec sapien nec consectetur. Nunc at dictum nisl, ac suscipit.`,

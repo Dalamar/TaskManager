@@ -3,8 +3,8 @@ import { RootState } from '../../store';
 
 export interface TaskState {
   id: string | number;
-  date: string;
-  time: string;
+  date: number;
+  timestamp: number;
   text: string;
 }
 
@@ -28,7 +28,7 @@ export const tasksSlice = createSlice({
 
 export const { addTask, deleteTask } = tasksSlice.actions;
 
-export const selectDateTasks = (date: string) => {
+export const selectDateTasks = (date: number) => {
   return createSelector(
     (state: RootState) => state.tasks,
     (tasks) => tasks.filter((task: TaskState) => task.date === date),

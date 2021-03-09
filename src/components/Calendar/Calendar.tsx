@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { getNextDates } from '../../utils/dateUtils';
+import { getDateAtMidnight, getNextDates } from '../../utils/dateUtils';
 import { CalendarList, SelectedDate } from './CalendarList';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -22,7 +22,7 @@ export const Calendar: FC<Props> = ({ testID }): ReactElement => {
   const dispatch = useDispatch();
 
   const getOnSelectDate = (item: SelectedDate) => {
-    dispatch(selectDate({ selectedDate: item.toString() }));
+    dispatch(selectDate({ selectedDate: getDateAtMidnight(item).valueOf() }));
   };
 
   return (
@@ -31,7 +31,7 @@ export const Calendar: FC<Props> = ({ testID }): ReactElement => {
         testID="CalendarList"
         dates={getNextDates(new Date(), daysPageSize * 2)}
         onSelectDate={getOnSelectDate}
-        dateSelected={calendar.selectedDate.toString()}
+        dateSelected={calendar.selectedDate}
         pageSize={daysPageSize}
       />
     </View>

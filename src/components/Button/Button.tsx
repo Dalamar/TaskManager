@@ -35,6 +35,7 @@ const styles = StyleSheet.create<Style>({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 8,
+    paddingVertical: 9,
   },
   text: {
     color: colors.textButton,

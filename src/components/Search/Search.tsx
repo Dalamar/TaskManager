@@ -46,7 +46,6 @@ export const Search: FC<Props> = ({ testID, onSearch }): ReactElement => {
 const styles = StyleSheet.create<Style>({
   container: {
     marginHorizontal: 16,
-    height: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

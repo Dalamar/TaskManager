@@ -27,7 +27,7 @@ interface Style {
 }
 
 export const TaskCard = ({ testID, task }: Props) => {
-  const { text, date, time } = task;
+  const { text, timestamp } = task;
   const dispatch = useDispatch();
 
   const renderRightActions = (
@@ -59,7 +59,7 @@ export const TaskCard = ({ testID, task }: Props) => {
         <Text style={styles.text}>{text}</Text>
         <View style={styles.containerDateTime}>
           <Text style={styles.textDateTime}>
-            {date} {time}
+            {new Date(timestamp).toLocaleString()}
           </Text>
         </View>
       </View>

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   FlatList,
   ListRenderItem,
   StyleSheet,
@@ -20,11 +19,12 @@ import {
 } from '../../utils/dateUtils';
 import { deviceLocaleLang } from '../../utils/localeUtils';
 import { colors } from '../../design/colors';
+import Button from '../Button';
 
 interface Props {
   testID: string;
   dates: Date[];
-  dateSelected: string;
+  dateSelected: number;
   pageSize: number;
   onSelectDate: Function;
 }
@@ -127,7 +127,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
 
   renderCalendarItem: ListRenderItem<Date> = ({ item }) => {
     const { dateSelected } = this.props;
-    const selectedDate = new Date(dateSelected).getDate() === item.getDate();
+    const selectedDate = dateSelected === getDateAtMidnight(item).valueOf();
 
     return (
       <TouchableOpacity
@@ -294,7 +294,11 @@ export class CalendarList extends React.PureComponent<Props, State> {
         {currentDayIsVisible ? (
           <View style={{ height: 38 }} />
         ) : (
-          <Button title="Get back to today" onPress={this.handleBackToToday} />
+          <Button
+            testID="BackTodayButton"
+            title="Get back to today"
+            onPress={this.handleBackToToday}
+          />
         )}
       </View>
     );

@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
+import { getDateAtMidnight } from '../../../utils/dateUtils';
 
 export interface CalendarState {
-  selectedDate: string;
+  selectedDate: number;
 }
 
 const initialState: CalendarState = {
-  selectedDate: new Date().toString(),
+  selectedDate: getDateAtMidnight(new Date()).valueOf(),
 };
 
 export const calendarSlice = createSlice({
