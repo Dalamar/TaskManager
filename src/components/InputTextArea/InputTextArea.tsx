@@ -1,6 +1,7 @@
 import React, { FC, ReactElement, Ref, useState } from 'react';
 import { StyleSheet, TextInput, ViewStyle } from 'react-native';
 import { colors } from '../../design/colors';
+import { typography } from '../../design/typography';
 
 interface Props {
   inputRef?: Ref<TextInput>;
@@ -40,10 +41,10 @@ export const InputTextArea: FC<Props> = ({
 const styles = StyleSheet.create<Style>({
   container: {
     padding: 8,
-    height: 300,
+    height: 100,
     borderWidth: 0.3,
     borderRadius: 4,
     borderColor: colors.borderInput,
-    color: colors.textInput,
+    ...typography.inputText,
   },
 });

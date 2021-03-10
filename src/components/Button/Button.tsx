@@ -10,6 +10,7 @@ import { colors } from '../../design/colors';
 
 interface Props {
   testID: string;
+  disabled?: boolean;
   title: string;
   onPress: any;
 }
@@ -17,15 +18,24 @@ interface Props {
 interface Style {
   container: ViewStyle;
   text: TextStyle;
+  textDisabled: TextStyle;
 }
 
-export const Button: FC<Props> = ({ testID, title, onPress }): ReactElement => {
+export const Button: FC<Props> = ({
+  testID,
+  title,
+  onPress,
+  disabled,
+}): ReactElement => {
   return (
     <TouchableOpacity
       testID={testID}
       style={styles.container}
+      disabled={disabled}
       onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+      <Text style={[styles.text, disabled && styles.textDisabled]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -39,6 +49,11 @@ const styles = StyleSheet.create<Style>({
   },
   text: {
     color: colors.textButton,
+    fontSize: 16,
+    fontWeight: '400',
+  },
+  textDisabled: {
+    color: colors.textButtonDisabled,
     fontSize: 16,
     fontWeight: '400',
   },

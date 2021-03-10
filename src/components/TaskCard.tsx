@@ -100,5 +100,7 @@ const styles = StyleSheet.create<Style>({
   textDeleteBox: {
     color: colors.textDeleteButton,
     fontWeight: 'bold',
+    paddingVertical: 24,
+    paddingHorizontal: 4,
   },
 });

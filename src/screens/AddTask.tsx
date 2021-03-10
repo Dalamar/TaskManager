@@ -1,14 +1,21 @@
 import React, { FC, ReactElement, useState } from 'react';
-import { StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { addTask } from '../state/features/task/tasksSlice';
 import { v4 as uuid } from 'uuid';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '../components/Button';
 import { getDateAtMidnight } from '../utils/dateUtils';
-import { selectCalendar } from '../state/features/calendar/calendarSlice';
 import InputTextArea from '../components/InputTextArea';
 import { useNavigation } from '@react-navigation/native';
 import DatePicker from 'react-native-date-picker';
+import { typography } from '../design/typography';
 
 interface Props {
   testID: string;
@@ -18,23 +25,24 @@ interface Props {
 interface Style {
   container: ViewStyle;
   containerButton: ViewStyle;
+  containerModal: ViewStyle;
+  containerDateTime: ViewStyle;
+  textDateTime: TextStyle;
 }
 
 const AddTask: FC<Props> = ({ testID }): ReactElement => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { selectedDate } = useSelector(selectCalendar);
   const [taskText, setTaskText] = useState('');
   const [dateTime, setDateTime] = useState(new Date());
-
-  const date = getDateAtMidnight(new Date(selectedDate)).valueOf();
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   const handleAddTask = () => {
     dispatch(
       addTask({
         id: uuid(),
-        date,
-        timestamp: Date.now(),
+        date: getDateAtMidnight(new Date(dateTime)).valueOf(),
+        timestamp: dateTime.valueOf(),
         text: taskText,
       }),
     );
@@ -43,7 +51,14 @@ const AddTask: FC<Props> = ({ testID }): ReactElement => {
 
   return (
     <View testID={testID} style={styles.container}>
-      <DatePicker date={dateTime} onDateChange={setDateTime} mode="datetime" />
+      <View style={styles.containerDateTime}>
+        <Button
+          testID="AddTaskButton"
+          title="Set date time"
+          onPress={() => setDatePickerVisible(true)}
+        />
+        <Text style={styles.textDateTime}>{dateTime.toLocaleString()}</Text>
+      </View>
       <InputTextArea
         testID="AddTaskInputTextArea"
         placeholder="Enter task text here..."
@@ -52,10 +67,29 @@ const AddTask: FC<Props> = ({ testID }): ReactElement => {
       <View style={styles.containerButton}>
         <Button
           testID="AddTaskButton"
-          title="Add Task"
+          title="Save"
           onPress={handleAddTask}
+          disabled={!taskText}
         />
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={datePickerVisible}>
+        <View style={styles.containerModal}>
+          <DatePicker
+            date={dateTime}
+            onDateChange={setDateTime}
+            mode="datetime"
+          />
+          <Button
+            testID="AddTaskButton"
+            title="Set"
+            onPress={() => setDatePickerVisible(false)}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -66,6 +100,18 @@ const styles = StyleSheet.create<Style>({
   },
   containerButton: {
     marginTop: 16,
+  },
+  containerModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  containerDateTime: {
+    marginVertical: 16,
+  },
+  textDateTime: {
+    ...typography.mainText,
   },
 });
 

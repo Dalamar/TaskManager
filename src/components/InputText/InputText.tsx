@@ -1,6 +1,7 @@
 import React, { FC, ReactElement, Ref, useState } from 'react';
 import { StyleSheet, TextInput, ViewStyle } from 'react-native';
 import { colors } from '../../design/colors';
+import { typography } from '../../design/typography';
 
 interface Props {
   inputRef?: Ref<TextInput>;
@@ -42,6 +43,6 @@ const styles = StyleSheet.create<Style>({
     borderWidth: 0.3,
     borderRadius: 4,
     borderColor: colors.borderInput,
-    color: colors.textInput,
+    ...typography.inputText,
   },
 });
