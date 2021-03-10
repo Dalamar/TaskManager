@@ -25,6 +25,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    // Send error report to Sentry or similar.
+    // For this test project console.log will do.
     console.log('ErrorBoundary', errorInfo);
   }
 
