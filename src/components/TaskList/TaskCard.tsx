@@ -13,12 +13,12 @@ import {
   deleteTask,
   setTaskDone,
   unsetTaskDone,
-} from '../state/features/task/tasksSlice';
+} from '../../state/features/task/tasksSlice';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
-import { colors } from '../design/colors';
+import { colors } from '../../design/colors';
 import CheckBox from '@react-native-community/checkbox';
-import { typography } from '../design/typography';
+import { typography } from '../../design/typography';
 
 interface Props {
   task: TaskState;

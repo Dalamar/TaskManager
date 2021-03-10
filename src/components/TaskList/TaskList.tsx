@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { FlatList, ListRenderItem, StyleSheet, ViewStyle } from 'react-native';
-import { TaskCard } from '../TaskCard';
+import { TaskCard } from './TaskCard';
 import { TaskState } from '../../state/features/task/tasksSlice';
 
 interface Props {
