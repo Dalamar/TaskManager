@@ -12,21 +12,19 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
+import createSagaMiddleware from 'redux-saga';
 import AsyncStorage from '@react-native-community/async-storage';
 import tasksReducer from './features/task/tasksSlice';
 import calendarReducer from './features/calendar/calendarSlice';
 import searchReducer from './features/search/searchSlice';
+import sagas from './sagas';
+import { createInjectorsEnhancer } from 'redux-injectors';
 
 const middlewares = getDefaultMiddleware({
   serializableCheck: {
     ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
   },
 });
-
-if (__DEV__) {
-  const createDebugger = require('redux-flipper').default;
-  middlewares.push(createDebugger());
-}
 
 const persistConfig = {
   key: 'TaskManager',
@@ -42,9 +40,32 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+const reduxSagaMonitorOptions = {};
+const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);
+const { run: runSaga } = sagaMiddleware;
+
+const enhancers = [
+  createInjectorsEnhancer({
+    // @ts-ignore
+    createReducer: persistedReducer,
+    runSaga,
+  }),
+];
+
+if (__DEV__) {
+  const createDebugger = require('redux-flipper').default;
+  middlewares.push(createDebugger());
+}
+
+middlewares.push(sagaMiddleware);
+
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: middlewares,
+  devTools: process.env.NODE_ENV !== 'production',
+  enhancers,
 });
+
+runSaga(sagas);
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -9,4 +9,5 @@ export const colors = {
   bgCard: '#f7fbfc',
   bgDeleteButton: '#ff0000',
   textDeleteButton: '#ffffff',
+  white: '#ffffff',
 };

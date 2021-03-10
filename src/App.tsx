@@ -7,9 +7,9 @@ import { Provider } from 'react-redux';
 import { store } from './state/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
+import { NotifierWrapper } from 'react-native-notifier';
 import ErrorBoundary from './components/ErrorBoundary';
 import Main from './screens/Main';
-import { colors } from './design/colors';
 import { theme } from './design/theme';
 import AddTask from './screens/AddTask';
 
@@ -20,27 +20,29 @@ const App = () => {
 
   return (
     <ErrorBoundary>
-      <NavigationContainer theme={theme}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <StatusBar barStyle="dark-content" />
-            <SafeAreaView style={{ flex: 1 }}>
-              <Stack.Navigator>
-                <Stack.Screen
-                  name="Main"
-                  component={Main}
-                  options={{ title: 'Tasks' }}
-                />
-                <Stack.Screen
-                  name="AddTask"
-                  component={AddTask}
-                  options={{ title: '' }}
-                />
-              </Stack.Navigator>
-            </SafeAreaView>
-          </PersistGate>
-        </Provider>
-      </NavigationContainer>
+      <NotifierWrapper>
+        <NavigationContainer theme={theme}>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <StatusBar barStyle="dark-content" />
+              <SafeAreaView style={{ flex: 1 }}>
+                <Stack.Navigator>
+                  <Stack.Screen
+                    name="Main"
+                    component={Main}
+                    options={{ title: 'Tasks' }}
+                  />
+                  <Stack.Screen
+                    name="AddTask"
+                    component={AddTask}
+                    options={{ title: '' }}
+                  />
+                </Stack.Navigator>
+              </SafeAreaView>
+            </PersistGate>
+          </Provider>
+        </NavigationContainer>
+      </NotifierWrapper>
     </ErrorBoundary>
   );
 };
