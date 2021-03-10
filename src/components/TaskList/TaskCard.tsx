@@ -120,7 +120,7 @@ const styles = ScaledSheet.create<Style>({
   },
   containerCheckBox: {
     paddingHorizontal: s(16),
-    paddingBottom: vs(8),
+    paddingBottom: s(16),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -128,6 +128,7 @@ const styles = ScaledSheet.create<Style>({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
+    paddingLeft: s(8),
   },
   containerTaskText: {
     flex: 1,
@@ -145,8 +146,7 @@ const styles = ScaledSheet.create<Style>({
     textDecorationLine: 'line-through',
   },
   textDateTime: {
-    fontSize: s(10),
-    color: colors.textCard,
+    ...typography.taskCardTextDate,
   },
   containerDeleteBox: {
     justifyContent: 'center',
