@@ -4,6 +4,7 @@ import {
   ListRenderItem,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -44,9 +45,11 @@ interface Style {
   container: ViewStyle;
   containerList: ViewStyle;
   containerHeader: ViewStyle;
-  textHeader: ViewStyle;
+  textHeader: TextStyle;
   containerItem: ViewStyle;
-  textItem: ViewStyle;
+  textItem: TextStyle;
+  textBold: TextStyle;
+  shim: ViewStyle;
 }
 
 export type SelectedDate = Date;
@@ -134,22 +137,10 @@ export class CalendarList extends React.PureComponent<Props, State> {
         testID={item.toString()}
         onPress={() => this.handleListItemPress(item)}
         style={styles.containerItem}>
-        <Text
-          style={[
-            styles.textItem,
-            selectedDate && {
-              fontWeight: 'bold',
-            },
-          ]}>
+        <Text style={[styles.textItem, selectedDate && styles.textBold]}>
           {getDateWeekDayLocal(item, this.locale)}
         </Text>
-        <Text
-          style={[
-            styles.textItem,
-            selectedDate && {
-              fontWeight: 'bold',
-            },
-          ]}>
+        <Text style={[styles.textItem, selectedDate && styles.textBold]}>
           {item.getDate()}
         </Text>
       </TouchableOpacity>
@@ -292,7 +283,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
           }}
         />
         {currentDayIsVisible ? (
-          <View style={{ height: 38 }} />
+          <View style={styles.shim} />
         ) : (
           <Button
             testID="BackTodayButton"
@@ -331,5 +322,9 @@ const styles = StyleSheet.create<Style>({
   textItem: {
     fontSize: 18,
     color: colors.textCalendar,
+  },
+  shim: { height: 38 },
+  textBold: {
+    fontWeight: 'bold',
   },
 });

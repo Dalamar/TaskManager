@@ -1,13 +1,13 @@
-import { StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 interface Style {
   container: ViewStyle;
   content: ViewStyle;
-  title: ViewStyle;
-  subtitle: ViewStyle;
+  title: TextStyle;
+  subtitle: TextStyle;
   error: ViewStyle;
   button: ViewStyle;
-  buttonText: ViewStyle;
+  buttonText: TextStyle;
 }
 
 const styles: Style = StyleSheet.create<Style>({

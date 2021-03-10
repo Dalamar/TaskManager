@@ -4,6 +4,7 @@ export const colors = {
   textButton: '#0d9ae5',
   textButtonDisabled: '#b7c7d2',
   borderInput: '#6185ae',
+  borderNavigation: 'transparent',
   textInput: '#6185ae',
   bgCard: '#f7fbfc',
   bgDeleteButton: '#ff0000',

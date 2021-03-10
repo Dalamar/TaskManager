@@ -6,6 +6,7 @@ export interface TaskState {
   date: number;
   timestamp: number;
   text: string;
+  done?: boolean;
 }
 
 export type TasksState = TaskState[];
@@ -20,13 +21,33 @@ export const tasksSlice = createSlice({
       return state.concat(action.payload);
     },
     deleteTask: (state, action: PayloadAction<TaskState>) => {
-      console.log('action', action);
       return state.filter((task: TaskState) => task.id !== action.payload.id);
+    },
+    setTaskDone: (state, action: PayloadAction<TaskState>) => {
+      state.map((task: TaskState) => {
+        if (task.id === action.payload.id) {
+          task.done = true;
+        }
+        return task;
+      });
+    },
+    unsetTaskDone: (state, action: PayloadAction<TaskState>) => {
+      state.map((task: TaskState) => {
+        if (task.id === action.payload.id) {
+          task.done = false;
+        }
+        return task;
+      });
     },
   },
 });
 
-export const { addTask, deleteTask } = tasksSlice.actions;
+export const {
+  addTask,
+  deleteTask,
+  setTaskDone,
+  unsetTaskDone,
+} = tasksSlice.actions;
 
 export const selectDateTasks = (date: number) => {
   return createSelector(
