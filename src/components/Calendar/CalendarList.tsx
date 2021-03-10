@@ -1,10 +1,8 @@
 import React from 'react';
 import {
   FlatList,
-  ListRenderItem,
   Text,
   TextStyle,
-  TouchableOpacity,
   View,
   ViewStyle,
   ViewToken,
@@ -13,7 +11,6 @@ import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import {
   getDateAtMidnight,
   getDateMonthLocal,
-  getDateWeekDayLocal,
   getNextDate,
   getNextDates,
   getPreviousDates,
@@ -21,6 +18,7 @@ import {
 import { deviceLocaleLang } from '../../utils/localeUtils';
 import { colors } from '../../design/colors';
 import Button from '../Button';
+import { CalendarItem } from './CalendarItem';
 
 interface Props {
   testID: string;
@@ -49,7 +47,6 @@ interface Style {
   containerItem: ViewStyle;
   textItem: TextStyle;
   textBold: TextStyle;
-  shim: ViewStyle;
 }
 
 export type SelectedDate = Date;
@@ -128,25 +125,6 @@ export class CalendarList extends React.PureComponent<Props, State> {
     onSelectDate(item);
   };
 
-  renderCalendarItem: ListRenderItem<Date> = ({ item }) => {
-    const { dateSelected } = this.props;
-    const selectedDate = dateSelected === getDateAtMidnight(item).valueOf();
-
-    return (
-      <TouchableOpacity
-        testID={item.toString()}
-        onPress={() => this.handleListItemPress(item)}
-        style={styles.containerItem}>
-        <Text style={[styles.textItem, selectedDate && styles.textBold]}>
-          {getDateWeekDayLocal(item, this.locale)}
-        </Text>
-        <Text style={[styles.textItem, selectedDate && styles.textBold]}>
-          {item.getDate()}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
   // Handle FlatList visible items change in order to provide year and month
   // for the visible dates and data for making the decision on whether we need
   // to prepend previous dates on scroll to the left
@@ -156,8 +134,8 @@ export class CalendarList extends React.PureComponent<Props, State> {
   }) => {
     const { viewableItems } = info;
 
-    let date = viewableItems?.filter((viewToken) => viewToken.isViewable)[0]
-      .item;
+    let viewTokens = viewableItems?.filter((viewToken) => viewToken.isViewable);
+    let date = viewTokens.length ? viewableItems[0].item : null;
 
     if (date) {
       this.setVisibleItem(date);
@@ -192,7 +170,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { testID, pageSize } = this.props;
+    const { testID, pageSize, dateSelected } = this.props;
     const {
       dates,
       xStart,
@@ -216,11 +194,15 @@ export class CalendarList extends React.PureComponent<Props, State> {
           contentContainerStyle={styles.containerList}
           data={dates}
           keyExtractor={(item) => item.valueOf().toString()}
-          renderItem={this.renderCalendarItem}
+          renderItem={({ item }) => (
+            <CalendarItem
+              dateSelected={dateSelected}
+              onPress={this.handleListItemPress}
+              item={item}
+            />
+          )}
           horizontal={true}
           bounces={true}
-          pagingEnabled={true}
-          windowSize={pageSize * 3}
           initialNumToRender={pageSize}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
@@ -252,7 +234,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
               }
             }
           }}
-          onMomentumScrollEnd={() => {
+          onMomentumScrollBegin={() => {
             const isCurrentDayIsVisible =
               visibleItem.toLocaleDateString() ===
               getDateAtMidnight(new Date()).toLocaleDateString();
@@ -322,7 +304,6 @@ const styles = ScaledSheet.create<Style>({
     fontSize: s(18),
     color: colors.textCalendar,
   },
-  shim: { height: vs(40) },
   textBold: {
     fontWeight: 'bold',
   },
