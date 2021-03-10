@@ -12,6 +12,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Main from './screens/Main';
 import { theme } from './design/theme';
 import AddTask from './screens/AddTask';
+import { styles } from './design/styles';
 
 const Stack = createStackNavigator();
 
@@ -25,7 +26,7 @@ const App = () => {
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <StatusBar barStyle="dark-content" />
-              <SafeAreaView style={{ flex: 1 }}>
+              <SafeAreaView style={styles.flexOne}>
                 <Stack.Navigator>
                   <Stack.Screen
                     name="Main"

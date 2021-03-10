@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
-import { getDateAtMidnight } from '../../../utils/dateUtils';
 
 export interface SearchState {
   text: string;
