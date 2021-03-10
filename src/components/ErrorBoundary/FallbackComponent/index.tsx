@@ -1,9 +1,18 @@
 import React from 'react';
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  GestureResponderEvent,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import styles from './styles';
 
-export type Props = { error: Error; resetError: any };
+export type Props = {
+  error: Error;
+  resetError: (event: GestureResponderEvent) => void;
+};
 
 const FallbackComponent = (props: Props) => (
   <SafeAreaView style={styles.container}>

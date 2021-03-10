@@ -5,7 +5,7 @@ import { TaskState } from '../../state/features/task/tasksSlice';
 
 interface Props {
   testID: string;
-  tasks: Array<any>;
+  tasks: Array<TaskState>;
 }
 
 interface Style {

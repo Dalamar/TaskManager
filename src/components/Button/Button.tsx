@@ -1,18 +1,20 @@
 import React, { FC, ReactElement } from 'react';
 import {
+  GestureResponderEvent,
   StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
+  TouchableOpacityProps,
   ViewStyle,
 } from 'react-native';
 import { colors } from '../../design/colors';
 
-interface Props {
+interface Props extends TouchableOpacityProps {
   testID: string;
   disabled?: boolean;
   title: string;
-  onPress: any;
+  onPress: (event: GestureResponderEvent) => void;
 }
 
 interface Style {

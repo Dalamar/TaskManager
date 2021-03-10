@@ -11,7 +11,7 @@ type Props = {
 
 type State = { error: Error | null };
 
-export default class ErrorBoundary extends React.Component<Props, State> {
+export default class ErrorBoundary extends React.PureComponent<Props, State> {
   state: State = { error: null };
 
   static defaultProps: {
@@ -30,7 +30,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     console.log('ErrorBoundary', errorInfo);
   }
 
-  resetError: Function = () => {
+  resetError = () => {
     this.setState({ error: null });
   };
 
