@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import {
   selectDateTasks,
   selectTasksByText,
 } from '../state/features/task/tasksSlice';
 import { useSelector } from 'react-redux';
+import { ms, s, ScaledSheet } from 'react-native-size-matters';
 import { selectCalendar } from '../state/features/calendar/calendarSlice';
 import TaskList from '../components/TaskList';
 import Calendar from '../components/Calendar';
@@ -14,6 +15,8 @@ import { useNavigation } from '@react-navigation/native';
 
 interface Style {
   container: ViewStyle;
+  containerCalendar: ViewStyle;
+  containerSearch: ViewStyle;
   containerTasksList: ViewStyle;
   containerAddTaskButton: ViewStyle;
 }
@@ -31,10 +34,10 @@ const Main = () => {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.containerCalendar}>
         <Calendar testID="Calendar" />
       </View>
-      <View>
+      <View style={styles.containerSearch}>
         <Search testID="Search" onSearch={setSearchText} />
       </View>
       <View style={styles.containerTasksList}>
@@ -54,14 +57,25 @@ const Main = () => {
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {
     flex: 1,
     justifyContent: 'space-between',
   },
+  containerCalendar: {
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  containerSearch: {
+    paddingTop: ms(28),
+  },
   containerTasksList: {
     flex: 1,
-    margin: 16,
+    margin: s(16),
   },
   containerAddTaskButton: {},
 });

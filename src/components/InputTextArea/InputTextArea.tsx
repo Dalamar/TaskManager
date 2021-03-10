@@ -1,5 +1,6 @@
 import React, { FC, ReactElement, Ref, useState } from 'react';
-import { StyleSheet, TextInput, ViewStyle } from 'react-native';
+import { TextInput, ViewStyle } from 'react-native';
+import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import { colors } from '../../design/colors';
 import { typography } from '../../design/typography';
 
@@ -38,12 +39,12 @@ export const InputTextArea: FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {
-    padding: 8,
-    height: 100,
+    padding: s(8),
+    height: vs(100),
     borderWidth: 0.3,
-    borderRadius: 4,
+    borderRadius: s(4),
     borderColor: colors.borderInput,
     ...typography.inputText,
   },

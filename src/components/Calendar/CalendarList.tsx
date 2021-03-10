@@ -2,7 +2,6 @@ import React from 'react';
 import {
   FlatList,
   ListRenderItem,
-  StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
@@ -10,6 +9,7 @@ import {
   ViewStyle,
   ViewToken,
 } from 'react-native';
+import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import {
   getDateAtMidnight,
   getDateMonthLocal,
@@ -282,9 +282,7 @@ export class CalendarList extends React.PureComponent<Props, State> {
             }
           }}
         />
-        {currentDayIsVisible ? (
-          <View style={styles.shim} />
-        ) : (
+        {!currentDayIsVisible && (
           <Button
             testID="BackTodayButton"
             title="Get back to today"
@@ -296,9 +294,10 @@ export class CalendarList extends React.PureComponent<Props, State> {
   }
 }
 
-const styles = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {
     marginHorizontal: 0,
+    height: vs(180),
   },
   containerList: {
     flexDirection: 'row',
@@ -307,23 +306,23 @@ const styles = StyleSheet.create<Style>({
   containerHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 24,
-    marginHorizontal: 16,
+    marginVertical: vs(24),
+    marginHorizontal: s(16),
   },
   textHeader: {
-    fontSize: 24,
+    fontSize: s(24),
     color: colors.textCalendar,
   },
   containerItem: {
     flexDirection: 'column',
     alignItems: 'center',
-    width: 59,
+    width: s(59),
   },
   textItem: {
-    fontSize: 18,
+    fontSize: s(18),
     color: colors.textCalendar,
   },
-  shim: { height: 38 },
+  shim: { height: vs(40) },
   textBold: {
     fontWeight: 'bold',
   },

@@ -1,5 +1,6 @@
 import React, { FC, ReactElement } from 'react';
-import { FlatList, ListRenderItem, StyleSheet, ViewStyle } from 'react-native';
+import { FlatList, ListRenderItem, ViewStyle } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
 import { TaskCard } from './TaskCard';
 import { TaskState } from '../../state/features/task/tasksSlice';
 
@@ -28,6 +29,6 @@ export const TaskList: FC<Props> = ({ testID, tasks }): ReactElement => {
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {},
 });

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import {
   Animated,
-  StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
+import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import {
-  TaskState,
   deleteTask,
   setTaskDone,
+  TaskState,
   unsetTaskDone,
 } from '../../state/features/task/tasksSlice';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -105,22 +105,22 @@ export const TaskCard = ({ testID, task }: Props) => {
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: colors.bgCard,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-    height: 100,
-    marginBottom: 16,
-    paddingHorizontal: 8,
-    paddingTop: 16,
-    paddingBottom: 8,
+    borderTopLeftRadius: s(8),
+    borderBottomLeftRadius: s(8),
+    height: vs(100),
+    marginBottom: vs(16),
+    paddingHorizontal: s(8),
+    paddingTop: vs(16),
+    paddingBottom: vs(8),
   },
   containerCheckBox: {
-    paddingHorizontal: 16,
-    paddingBottom: 8,
+    paddingHorizontal: s(16),
+    paddingBottom: vs(8),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -145,20 +145,20 @@ const styles = StyleSheet.create<Style>({
     textDecorationLine: 'line-through',
   },
   textDateTime: {
-    fontSize: 10,
+    fontSize: s(10),
     color: colors.textCard,
   },
   containerDeleteBox: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.bgDeleteButton,
-    width: 100,
-    height: 100,
+    width: s(100),
+    height: vs(100),
   },
   textDeleteBox: {
     color: colors.textDeleteButton,
     fontWeight: 'bold',
-    paddingVertical: 24,
-    paddingHorizontal: 4,
+    paddingVertical: vs(24),
+    paddingHorizontal: s(4),
   },
 });

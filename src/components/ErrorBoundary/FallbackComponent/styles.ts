@@ -1,4 +1,5 @@
-import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import { TextStyle, ViewStyle } from 'react-native';
+import { s, ScaledSheet, vs } from 'react-native-size-matters';
 
 interface Style {
   container: ViewStyle;
@@ -10,31 +11,31 @@ interface Style {
   buttonText: TextStyle;
 }
 
-const styles: Style = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {
     backgroundColor: '#fafafa',
     flex: 1,
     justifyContent: 'center',
   },
   content: {
-    marginHorizontal: 16,
+    marginHorizontal: s(16),
   },
   title: {
-    fontSize: 48,
+    fontSize: s(48),
     fontWeight: '300',
-    paddingBottom: 16,
+    paddingBottom: vs(16),
   },
   subtitle: {
-    fontSize: 32,
+    fontSize: s(32),
     fontWeight: '800',
   },
   error: {
-    paddingVertical: 16,
+    paddingVertical: vs(16),
   },
   button: {
     backgroundColor: '#2196f3',
-    borderRadius: 50,
-    padding: 16,
+    borderRadius: s(50),
+    padding: s(16),
   },
   buttonText: {
     color: '#fff',

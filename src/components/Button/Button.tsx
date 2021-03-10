@@ -1,13 +1,13 @@
 import React, { FC, ReactElement } from 'react';
 import {
   GestureResponderEvent,
-  StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
   ViewStyle,
 } from 'react-native';
+import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import { colors } from '../../design/colors';
 
 interface Props extends TouchableOpacityProps {
@@ -42,21 +42,21 @@ export const Button: FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 9,
+    paddingHorizontal: s(8),
+    paddingVertical: vs(9),
   },
   text: {
     color: colors.textButton,
-    fontSize: 16,
+    fontSize: s(16),
     fontWeight: '400',
   },
   textDisabled: {
     color: colors.textButtonDisabled,
-    fontSize: 16,
+    fontSize: s(16),
     fontWeight: '400',
   },
 });

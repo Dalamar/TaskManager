@@ -1,12 +1,6 @@
 import React, { FC, ReactElement, useState } from 'react';
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { Modal, Text, TextStyle, View, ViewStyle } from 'react-native';
+import { s, ScaledSheet, vs } from 'react-native-size-matters';
 import { addTask } from '../state/features/task/tasksSlice';
 import { v4 as uuid } from 'uuid';
 import { useDispatch } from 'react-redux';
@@ -94,12 +88,12 @@ const AddTask: FC<Props> = ({ testID }): ReactElement => {
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {
-    margin: 16,
+    margin: s(16),
   },
   containerButton: {
-    marginTop: 16,
+    marginTop: vs(16),
   },
   containerModal: {
     flex: 1,
@@ -108,7 +102,7 @@ const styles = StyleSheet.create<Style>({
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
   containerDateTime: {
-    marginVertical: 16,
+    marginVertical: vs(16),
   },
   textDateTime: {
     ...typography.mainText,

@@ -1,10 +1,11 @@
-import { StyleSheet, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
 
 interface Style {
   flexOne: ViewStyle;
 }
 
-export const styles = StyleSheet.create<Style>({
+export const styles = ScaledSheet.create<Style>({
   flexOne: {
     flex: 1,
   },

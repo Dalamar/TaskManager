@@ -1,5 +1,6 @@
 import React, { FC, ReactElement, useRef } from 'react';
-import { StyleSheet, TextInput, View, ViewStyle } from 'react-native';
+import { TextInput, View, ViewStyle } from 'react-native';
+import { s, ScaledSheet } from 'react-native-size-matters';
 import Button from '../Button';
 import InputText from '../InputText';
 
@@ -40,13 +41,13 @@ export const Search: FC<Props> = ({ testID, onSearch }): ReactElement => {
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = ScaledSheet.create<Style>({
   container: {
-    marginHorizontal: 16,
+    marginHorizontal: s(16),
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   containerSearchInput: {
-    width: '80%',
+    width: s(240),
   },
 });

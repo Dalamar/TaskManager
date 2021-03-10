@@ -1,8 +1,9 @@
 import React, { FC, ReactElement } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import { getDateAtMidnight, getNextDates } from '../../utils/dateUtils';
 import { CalendarList, SelectedDate } from './CalendarList';
 import { useDispatch, useSelector } from 'react-redux';
+import { ScaledSheet, vs } from 'react-native-size-matters';
 import {
   selectCalendar,
   selectDate,
@@ -38,6 +39,8 @@ export const Calendar: FC<Props> = ({ testID }): ReactElement => {
   );
 };
 
-const styles = StyleSheet.create<Style>({
-  container: {},
+const styles = ScaledSheet.create<Style>({
+  container: {
+    marginBottom: vs(8),
+  },
 });
