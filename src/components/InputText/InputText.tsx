@@ -42,7 +42,6 @@ const styles = ScaledSheet.create<Style>({
   container: {
     padding: s(12),
     borderWidth: 0.3,
-    borderRadius: s(4),
     borderColor: colors.borderInput,
     ...typography.inputText,
   },

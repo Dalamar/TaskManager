@@ -48,6 +48,7 @@ const styles = ScaledSheet.create<Style>({
     justifyContent: 'space-between',
   },
   containerSearchInput: {
-    width: s(240),
+    flex: 1,
+    marginRight: 16,
   },
 });

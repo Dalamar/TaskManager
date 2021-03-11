@@ -46,8 +46,7 @@ const styles = ScaledSheet.create<Style>({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: s(8),
-    paddingVertical: vs(9),
+    paddingVertical: vs(8),
   },
   text: {
     color: colors.textButton,
